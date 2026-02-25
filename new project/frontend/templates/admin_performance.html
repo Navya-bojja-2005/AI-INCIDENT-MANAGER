@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="margin-bottom: 2rem;">
+        <a href="{{ url_for('dashboard') }}" style="color: #94a3b8; text-decoration: none;">&larr; Back to Dashboard</a>
+        <h2 style="margin-top: 1rem;">👨‍💻 Engineer Performance Report</h2>
+        <p style="color: #94a3b8;">Detailed analytics on support team efficiency and satisfaction.</p>
+    </div>
+
+    <div class="glass" style="padding: 0; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse; color: #cbd5e1;">
+            <thead>
+                <tr style="background: rgba(255,255,255,0.05); text-align: left;">
+                    <th style="padding: 1.5rem;">Engineer</th>
+                    <th style="padding: 1.5rem;">Incidents Resolved</th>
+                    <th style="padding: 1.5rem;">Avg Rating</th>
+                    <th style="padding: 1.5rem;">Avg Resolution Speed</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in engineer_stats %}
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div
+                                style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.1rem;">
+                                {{ stat.email[0]|upper }}
+                            </div>
+                            <div style="font-size: 1.1rem;">{{ stat.email }}</div>
+                        </div>
+                    </td>
+                    <td style="padding: 1.5rem; font-weight: bold; font-size: 1.2rem;">{{ stat.total }}</td>
+                    <td style="padding: 1.5rem;">
+                        {% if stat.avg_rating != "N/A" %}
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: #f59e0b; font-size: 1.2rem;">★</span>
+                            <span style="font-size: 1.2rem; font-weight: bold;">{{ stat.avg_rating }}</span>
+                        </div>
+                        {% else %}
+                        <span style="color: #64748b;">-</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 1.5rem; font-size: 1.1rem;">{{ stat.avg_time_hours }} hrs</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="padding: 4rem; text-align: center; color: #64748b; font-size: 1.1rem;">
+                        No performance data available yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

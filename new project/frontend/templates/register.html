@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box glass">
+        <h2 style="text-align: center;">Register</h2>
+
+        {% if error %}
+        <div
+            style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1rem; text-align: center;">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="email">Company Email</label>
+                <input type="email" id="email" name="email" required placeholder="you@company.com"
+                    title="Please use a valid email address">
+
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Choose a password">
+            </div>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" onchange="toggleDepartment()">
+                    <option value="employee">Employee</option>
+                    <option value="support">Support Engineer</option>
+                    <option value="admin">Administrator</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="dept-group" style="display: none;">
+                <label for="department">Department / Job Role</label>
+                <select id="department" name="department"
+                    style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white;">
+                    <option value="" disabled selected>Select Department...</option>
+                </select>
+            </div>
+
+            <script>
+                // Employee Roles (Flat List)
+                const employeeRoles = [
+                    "Software Developer", "Frontend Developer", "Backend Developer", "Full Stack Developer",
+                    "QA Engineer", "DevOps Engineer", "Data Analyst", "Data Engineer",
+                    "Cloud Engineer", "Cybersecurity Analyst",
+                    "HR Executive", "Finance Executive", "Marketing Executive", "Sales Executive",
+                    "Business Analyst", "Project Manager", "Operations Manager",
+                    "Customer Support Executive", "IT Coordinator"
+                ];
+
+                // Specific Support Teams
+                const supportTeams = [
+                    "Infrastructure Team", "Network Support Team", "Application Support Team",
+                    "Database Support Team", "Security Operations Team"
+                ];
+
+                function toggleDepartment() {
+                    const role = document.getElementById('role').value;
+                    const deptGroup = document.getElementById('dept-group');
+                    const deptSelect = document.getElementById('department');
+
+                    // Clear existing options
+                    deptSelect.innerHTML = '<option value="" disabled selected>Select Department / Role...</option>';
+
+                    let options = [];
+                    if (role === 'employee') {
+                        // Employee: Department NOT required (hidden)
+                        deptGroup.style.display = 'none';
+                        deptSelect.required = false;
+                        return;
+                    } else if (role === 'support') {
+                        options = supportTeams;
+                        deptGroup.style.display = 'block';
+                        deptSelect.required = true;
+                    } else {
+                        // Admin or others
+                        deptGroup.style.display = 'none';
+                        deptSelect.required = false;
+                        return;
+                    }
+
+                    // Populate options
+                    options.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item;
+                        option.textContent = item;
+                        deptSelect.appendChild(option);
+                    });
+                }
+
+            </script>
+            <button type="submit" style="width: 100%;">Create Account</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 1.5rem; color: #94a3b8;">
+            Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

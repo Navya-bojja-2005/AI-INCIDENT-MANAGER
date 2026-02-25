@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h2>{{ 'Engineer' if role == 'support' else role|capitalize }} Dashboard</h2>
+            <p style="color: #94a3b8;">
+                {% if role == 'support' %}
+                Viewing incidents for <strong>{{ user.department if user and user.department else 'All Departments'
+                    }}</strong>
+                {% else %}
+                Manage and track incident resolutions.
+                {% endif %}
+            </p>
+        </div>
+        <div>
+            <!-- Toggle Removed: Support only sees their team's incidents -->
+        </div>
+    </div>
+
+    {% if role == 'employee' %}
+    <!-- Employee Navigation Hub -->
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+        <a href="{{ url_for('submit_incident') }}" class="glass"
+            style="padding: 2rem; text-align: center; text-decoration: none; color: inherit; transition: transform 0.2s;">
+            <i class="fas fa-plus-circle" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <h3>Raise Incident</h3>
+            <p style="color: #94a3b8;">Report a new issue or outage.</p>
+        </a>
+
+        <a href="{{ url_for('employee_active') }}" class="glass"
+            style="padding: 2rem; text-align: center; text-decoration: none; color: inherit; transition: transform 0.2s;">
+            <i class="fas fa-tasks" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+            <h3>Track Active</h3>
+            <p style="color: #94a3b8;">View status of open tickets.</p>
+        </a>
+
+        <a href="{{ url_for('employee_history') }}" class="glass"
+            style="padding: 2rem; text-align: center; text-decoration: none; color: inherit; transition: transform 0.2s;">
+            <i class="fas fa-history" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+            <h3>History</h3>
+            <p style="color: #94a3b8;">View past resolved incidents.</p>
+        </a>
+    </div>
+
+    {% else %}
+    <!-- Admin/Support View (Original) -->
+
+    <!-- Stats Overview (Mockup for Admin/Support) -->
+
+    <!-- API Message Check -->
+    {% if request.args.get('msg') %}
+    <div class="alert">
+        <i class="fas fa-check-circle"></i> {{ request.args.get('msg') }}
+    </div>
+    {% endif %}
+
+
+
+    <!-- Stats Overview (Admin) -->
+    {% if role == 'admin' %}
+    <div class="grid"
+        style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+
+        <!-- Total Incidents -->
+        <a href="{{ url_for('admin_incidents', filter_type='total') }}" class="glass"
+            style="padding: 1.5rem; text-align: center; text-decoration: none; color: inherit; transition: transform 0.2s;">
+            <h3 style="font-size: 2rem; color: var(--primary);">{{ incidents|length }}</h3>
+            <p style="color: #94a3b8;">🔢 Total Incidents</p>
+        </a>
+
+        <!-- High Priority -->
+        <a href="{{ url_for('admin_incidents', filter_type='high') }}" class="glass"
+            style="padding: 1.5rem; text-align: center; text-decoration: none; color: inherit; transition: transform 0.2s;">
+            <h3 style="font-size: 2rem; color: var(--danger);">
+                {{ incidents|selectattr("priority", "equalto", "High")|list|length }}
+            </h3>
+            <p style="color: #94a3b8;">🔴 High Priority</p>
+        </a>
+
+        <!-- Medium Priority -->
+        <a href="{{ url_for('admin_incidents', filter_type='medium') }}" class="glass"
+            style="padding: 1.5rem; text-align: center; text-decoration: none; color: inherit; transition: transform 0.2s;">
+            <h3 style="font-size: 2rem; color: var(--warning);">
+                {{ incidents|selectattr("priority", "equalto", "Medium")|list|length }}
+            </h3>
+            <p style="color: #94a3b8;">🟠 Medium Priority</p>
+        </a>
+
+        <!-- Open Incidents -->
+        <a href="{{ url_for('admin_incidents', filter_type='open') }}" class="glass"
+            style="padding: 1.5rem; text-align: center; text-decoration: none; color: inherit; transition: transform 0.2s;">
+            <h3 style="font-size: 2rem; color: #38bdf8;">
+                {{ incidents|selectattr("status", "equalto", "Open")|list|length }}
+            </h3>
+            <p style="color: #94a3b8;">⏳ Open Incidents</p>
+        </a>
+
+        <!-- Escalated Incidents -->
+        <a href="{{ url_for('admin_incidents', filter_type='escalated') }}" class="glass"
+            style="padding: 1.5rem; text-align: center; text-decoration: none; color: inherit; transition: transform 0.2s;">
+            <h3 style="font-size: 2rem; color: var(--warning);">
+                {{ incidents|selectattr("escalated")|list|length }}
+            </h3>
+            <p style="color: #94a3b8;">⚠ Escalated</p>
+        </a>
+
+        <!-- Major Incidents -->
+        <a href="{{ url_for('admin_incidents', filter_type='major') }}" class="glass"
+            style="padding: 1.5rem; text-align: center; text-decoration: none; color: inherit; transition: transform 0.2s;">
+            <h3 style="font-size: 2rem; color: #a855f7;">
+                {{ incidents|selectattr("major_incident_group",
+                "defined")|selectattr("major_incident_group")|list|length }}
+            </h3>
+            <p style="color: #94a3b8;">🚨 Major Incidents</p>
+        </a>
+
+        <!-- Engineer Performance (New Box) -->
+        <a href="{{ url_for('admin_performance') }}" class="glass"
+            style="padding: 1.5rem; text-align: center; text-decoration: none; color: inherit; transition: transform 0.2s;">
+            <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--success); margin-bottom: 0.5rem;"></i>
+            <p style="color: #94a3b8;">Engineer Performance</p>
+        </a>
+    </div>
+    {% endif %}
+
+
+
+
+
+    <!-- Escalation Check Removed -->
+
+
+    {% if request.args.get('msg') %}
+    <div class="alert">
+        <i class="fas fa-check-circle"></i> {{ request.args.get('msg') }}
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- Incident List (Wide Layout - Support Only) -->
+    {% if role == 'support' %}
+    <div class="incident-list-container">
+        {% for incident in incidents %}
+        <div class="glass incident-card-wide {% if incident.major_incident_group %}major-incident{% endif %}">
+
+            <!-- Header: ID, Priority, Date -->
+            <div class="card-header">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span class="incident-id">{{ incident.incident_number if incident.incident_number else '#' }}</span>
+                    <span class="badge priority-{{ incident.priority|lower }}">{{ incident.priority }}</span>
+                    {% if incident.major_incident_group %}
+                    <span class="badge" style="background: var(--danger); color: white;">MAJOR</span>
+                    {% endif %}
+                    {% if incident.escalated %}
+                    <i class="fas fa-exclamation-triangle icon-escalated" title="Escalated"></i>
+                    {% endif %}
+                </div>
+                <div class="incident-date">
+                    <i class="far fa-clock"></i> {{ incident.created_at.strftime('%Y-%m-%d %H:%M') }}
+                </div>
+            </div>
+
+            <!-- Body: Description -->
+            <div class="card-body">
+                <p>{{ incident.description }}</p>
+                {% if incident.status == 'In Progress' and incident.sla_start_time and not incident.escalated %}
+                <div style="margin-top: 0.5rem;">
+                    <small class="sla-timer" data-start="{{ incident.sla_start_time.isoformat() }}"
+                        data-priority="{{ incident.priority }}"
+                        style="color: var(--warning); font-family: monospace; font-size: 0.9rem; font-weight: bold;">
+                        Calculated SLA...
+                    </small>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Footer: Meta & Actions -->
+            <div class="card-footer">
+                <div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+                    <!-- Status -->
+                    <div>
+                        <span
+                            style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Status</span>
+                        <div class="{{ 'text-success' if incident.status == 'Resolved' else 'text-warning' }}"
+                            style="font-weight: 600; font-size: 0.95rem; margin-top: 0.5rem;">
+                            {{ incident.status }}
+                        </div>
+                    </div>
+
+                    <!-- Assigned Team -->
+                    {% if incident.assigned_group %}
+                    <div>
+                        <span
+                            style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Assigned
+                            Team</span>
+                        <div style="margin-top: 0.5rem;">
+                            <div style="color: #e2e8f0; font-size: 0.95rem; margin-top: 0.5rem;">
+                                {{ incident.assigned_group }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Raised By -->
+                    <div>
+                        <span
+                            style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Raised
+                            By</span>
+                        <div style="color: #e2e8f0; font-size: 0.95rem; margin-top: 0.5rem;">
+                            {{ incident.created_by }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Aligned Action -->
+                <div class="actions">
+                    {% if role == 'support' and incident.status == 'Open' %}
+                    <a href="{{ url_for('pick_incident', incident_id=incident._id) }}" class="btn"
+                        style="background: linear-gradient(135deg, var(--primary), var(--accent)); padding: 0.5rem 1.5rem; border-radius: 9999px; font-size: 0.9rem;">
+                        Pick
+                    </a>
+                    {% elif role == 'support' and incident.status == 'In Progress' and incident.assigned_to == email %}
+                    <button onclick="openResolveModal('{{ incident._id }}')" class="btn"
+                        style="background: var(--success); padding: 0.5rem 1.5rem; border-radius: 9999px; font-size: 0.9rem;">
+                        Resolve
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not incidents %}
+    <div style="text-align: center; color: #64748b; padding: 4rem;">
+        <i class="fas fa-clipboard-check" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+        <p>No incidents found.</p>
+    </div>
+    {% endif %}
+    {% endif %}
+
+
+</div>
+
+<!-- Resolution Modal -->
+<div id="resolveModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="glass" style="padding: 2rem; width: 100%; max-width: 500px; position: relative;">
+        <h3 style="margin-bottom: 1rem;">Resolve Incident</h3>
+        <form action="{{ url_for('resolve_incident') }}" method="POST">
+            <input type="hidden" id="modalIncidentId" name="incident_id">
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: #94a3b8;">Action Taken</label>
+                <textarea name="action_taken" required rows="4"
+                    style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 0.5rem; border-radius: 0.5rem;"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button type="button" onclick="closeResolveModal()" class="btn"
+                    style="background: transparent; border: 1px solid var(--glass-border);">Cancel</button>
+                <button type="submit" class="btn" style="background: var(--success);">Confirm Resolution</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openResolveModal(incidentId) {
+        document.getElementById('modalIncidentId').value = incidentId;
+        document.getElementById('resolveModal').style.display = 'flex';
+    }
+
+    function closeResolveModal() {
+        document.getElementById('resolveModal').style.display = 'none';
+    }
+
+    // Close modal on outside click
+    window.onclick = function (event) {
+        var modal = document.getElementById('resolveModal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // SLA Timer Logic
+    function updateTimers() {
+        const timers = document.querySelectorAll('.sla-timer');
+        const now = new Date();
+
+        timers.forEach(timer => {
+            const startStr = timer.getAttribute('data-start');
+            if (!startStr) return;
+
+            // Parse UTC ISO string
+            const startTime = new Date(startStr + (startStr.endsWith('Z') ? '' : 'Z'));
+            const priority = timer.getAttribute('data-priority');
+
+            // Durations in Seconds
+            let duration = 3600; // High: 1h
+            if (priority === 'Medium') duration = 7200; // 2h
+            if (priority === 'Low') duration = 10800; // 3h
+
+            const elapsed = (now - startTime) / 1000;
+            const remaining = duration - elapsed;
+
+            if (remaining < 0) {
+                timer.innerHTML = "SLA OVERDUE";
+                timer.style.color = "var(--danger)";
+            } else {
+                const hours = Math.floor(remaining / 3600);
+                const minutes = Math.floor((remaining % 3600) / 60);
+                const seconds = Math.floor(remaining % 60);
+                timer.innerHTML = `SLA: ${hours}h ${minutes}m ${seconds}s`;
+            }
+        });
+    }
+
+    setInterval(updateTimers, 1000);
+    updateTimers(); // Initial run
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 800px;">
+    <div class="glass" style="padding: 2rem;">
+        <h2 style="margin-bottom: 2rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem;">
+            Report New Incident
+        </h2>
+
+        <form method="POST" action="{{ url_for('submit_incident') }}">
+
+            <div class="form-group">
+                <label for="employee_role" style="font-size: 1.1rem; color: #fff;">Your Role</label>
+                <select id="employee_role" name="employee_role" required
+                    style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1.5rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white;">
+                    <option value="" disabled selected>Select your role...</option>
+                    <option value="Software Developer">Software Developer</option>
+                    <option value="Frontend Developer">Frontend Developer</option>
+                    <option value="Backend Developer">Backend Developer</option>
+                    <option value="Full Stack Developer">Full Stack Developer</option>
+                    <option value="QA Engineer">QA Engineer</option>
+                    <option value="DevOps Engineer">DevOps Engineer</option>
+                    <option value="Data Analyst">Data Analyst</option>
+                    <option value="Data Engineer">Data Engineer</option>
+                    <option value="Cloud Engineer">Cloud Engineer</option>
+                    <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                    <option value="HR Executive">HR Executive</option>
+                    <option value="Finance Executive">Finance Executive</option>
+                    <option value="Marketing Executive">Marketing Executive</option>
+                    <option value="Sales Executive">Sales Executive</option>
+                    <option value="Business Analyst">Business Analyst</option>
+                    <option value="Project Manager">Project Manager</option>
+                    <option value="Operations Manager">Operations Manager</option>
+                    <option value="Customer Support Executive">Customer Support Executive</option>
+                    <option value="IT Coordinator">IT Coordinator</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description" style="font-size: 1.1rem; color: #fff;">Describe the Issue</label>
+                <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 0.5rem;">
+                    Please provide details about the problem. Our AI will analyze this to assign priority.
+                </p>
+                <!-- Textarea for description -->
+                <textarea id="description" name="description" rows="6" required
+                    placeholder="e.g., The payment server is down and customers cannot checkout..."></textarea>
+            </div>
+
+            <div id="ai-preview" style="margin-bottom: 1.5rem; display: none;">
+                <div class="glass" style="padding: 1rem; background: rgba(59, 130, 246, 0.1);">
+                    <small style="text-transform: uppercase; color: var(--accent); font-weight: bold;">AI Analysis
+                        Preview</small>
+                    <div id="preview-text" style="margin-top: 0.5rem;"></div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <button type="button" id="analyze-btn" class="btn btn-secondary">
+                    <i class="fas fa-magic"></i> Check Priority
+                </button>
+                <button type="submit" class="btn" style="flex: 1;">
+                    Submit Incident
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

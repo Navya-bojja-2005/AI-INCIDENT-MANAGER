@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block main_class %}{% endblock %}
+
+{% block content %}
+<div class="hero-container">
+
+    <!-- Left Column: Content -->
+    <div class="hero-content animate-fade-in">
+        <div style="margin-bottom: 2rem;">
+            <span class="badge"
+                style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.5rem 1rem;">
+                🚀 AI-Powered Operations
+            </span>
+        </div>
+
+        <h1 class="hero-title">
+            Resolve Incidents<br>
+            <span
+                style="background: linear-gradient(to right, #60a5fa, #22d3ee); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">In
+                Seconds.</span>
+        </h1>
+
+        <p class="hero-subtitle delay-100">
+            Turn chaos into clarity. The AI-first platform that resolves incidents before they become outages.
+        </p>
+
+        <div class="hero-buttons" style="display: flex; gap: 1.5rem; margin-bottom: 2rem;" class="delay-200">
+            {% if session.email %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-lg">
+                Go to Dashboard
+            </a>
+            {% else %}
+            <a href="{{ url_for('register') }}" class="btn btn-lg">
+                Get Started
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Right Column: Visual -->
+    <div class="hero-visual animate-fade-in delay-200">
+        <img src="{{ url_for('static', filename='hero_visual.svg') }}" alt="AI Dashboard Interface" class="hero-image">
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grad1)" rx="15" />
+  
+  <!-- Abstract Dashboard Elements -->
+  <rect x="50" y="50" width="300" height="200" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6" stroke-width="2" rx="5" filter="url(#glow)" />
+  <rect x="70" y="70" width="100" height="10" fill="#3b82f6" opacity="0.8" />
+  <rect x="70" y="90" width="200" height="10" fill="#3b82f6" opacity="0.4" />
+  <circle cx="280" cy="150" r="40" stroke="#06b6d4" stroke-width="3" fill="none" />
+  <path d="M70 180 q 20 -30 40 0 t 40 0" stroke="#10b981" stroke-width="3" fill="none" />
+
+  <rect x="380" y="100" width="150" height="100" fill="rgba(6, 182, 212, 0.1)" stroke="#06b6d4" stroke-width="2" rx="5" filter="url(#glow)" />
+  <circle cx="455" cy="150" r="30" stroke="#06b6d4" stroke-width="2" fill="none" />
+  
+  <line x1="350" y1="150" x2="380" y2="150" stroke="#94a3b8" stroke-dasharray="5,5" />
+</svg>

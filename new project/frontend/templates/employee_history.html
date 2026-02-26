@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="margin-bottom: 2rem;">
+        <a href="{{ url_for('dashboard') }}" style="color: #94a3b8; text-decoration: none;">&larr; Back to Dashboard</a>
+        <h2 style="margin-top: 1rem;">Incident History</h2>
+        <p style="color: #94a3b8;">View your resolved and closed tickets.</p>
+    </div>
+
+    <div class="grid">
+        {% for incident in incidents %}
+        <div class="glass incident-card" style="opacity: 0.8;">
+            <div class="incident-content">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div class="badge-container">
+                        <span style="font-family: monospace; font-weight: bold; color: #cbd5e1;">
+                            {{ incident.incident_number if incident.incident_number else '#' }}
+                        </span>
+                        <span class="badge" style="background: #475569;">{{ incident.priority }}</span>
+                        {% if incident.escalated %}
+                        <i class="fas fa-exclamation-triangle icon-escalated" title="Escalated"></i>
+                        {% endif %}
+                    </div>
+                    <small style="color: #64748b;">{{ incident.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                </div>
+                <p
+                    style="color: #cbd5e1; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                    {{ incident.description }}
+                </p>
+            </div>
+
+            <div class="incident-footer">
+                <div>
+                    <span style="color: #94a3b8; font-size: 0.875rem;">Status:</span>
+                    <strong style="color: var(--success);">{{ incident.status }}</strong>
+                </div>
+
+                <!-- Rating Section -->
+                <div>
+                    {% if incident.rating %}
+                    <div style="color: #f59e0b; text-align: right;">
+                        <span style="color: #94a3b8; font-size: 0.9rem;">Rated:</span>
+                        {% for i in range(incident.rating) %}★{% endfor %}
+                        <span style="color: #64748b; font-size: 0.8rem;">({{ incident.rating }}/5)</span>
+                    </div>
+                    {% else %}
+                    <form action="{{ url_for('rate_incident_route') }}" method="POST"
+                        style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="hidden" name="incident_id" value="{{ incident._id }}">
+                        <span style="color: #94a3b8; font-size: 0.9rem;">Rate:</span>
+                        <div class="star-rating" style="font-size: 1.2rem;">
+                            <input type="radio" id="star5-{{ incident._id }}" name="rating" value="5"
+                                onchange="this.form.submit()"><label for="star5-{{ incident._id }}">★</label>
+                            <input type="radio" id="star4-{{ incident._id }}" name="rating" value="4"
+                                onchange="this.form.submit()"><label for="star4-{{ incident._id }}">★</label>
+                            <input type="radio" id="star3-{{ incident._id }}" name="rating" value="3"
+                                onchange="this.form.submit()"><label for="star3-{{ incident._id }}">★</label>
+                            <input type="radio" id="star2-{{ incident._id }}" name="rating" value="2"
+                                onchange="this.form.submit()"><label for="star2-{{ incident._id }}">★</label>
+                            <input type="radio" id="star1-{{ incident._id }}" name="rating" value="1"
+                                onchange="this.form.submit()"><label for="star1-{{ incident._id }}">★</label>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not incidents %}
+    <div style="text-align: center; color: #64748b; padding: 4rem;">
+        <p>No history found.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

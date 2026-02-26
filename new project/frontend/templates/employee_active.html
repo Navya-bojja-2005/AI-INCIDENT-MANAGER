@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="margin-bottom: 2rem;">
+        <a href="{{ url_for('dashboard') }}" style="color: #94a3b8; text-decoration: none;">&larr; Back to Dashboard</a>
+        <h2 style="margin-top: 1rem;">Active Tickets</h2>
+        <p style="color: #94a3b8;">Track the status of your open incidents.</p>
+    </div>
+
+    <div class="grid">
+        {% for incident in incidents %}
+        <div class="glass incident-card">
+            <div class="incident-content">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div class="badge-container">
+                        <span style="font-family: monospace; font-weight: bold; color: #cbd5e1;">
+                            {{ incident.incident_number if incident.incident_number else '#' }}
+                        </span>
+                        <span class="badge priority-{{ incident.priority|lower }}">
+                            {{ incident.priority }}
+                        </span>
+                        {% if incident.escalated %}
+                        <i class="fas fa-exclamation-triangle icon-escalated" title="Escalated"></i>
+                        {% endif %}
+                    </div>
+                    <small style="color: #64748b;">{{ incident.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                </div>
+                <p
+                    style="color: #e2e8f0; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                    {{ incident.description }}
+                </p>
+            </div>
+            <div class="incident-footer">
+                <div>
+                    <span style="color: #94a3b8; font-size: 0.875rem;">Status:</span>
+                    <strong style="color: var(--warning);">{{ incident.status }}</strong>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not incidents %}
+    <div style="text-align: center; color: #64748b; padding: 4rem;">
+        <p>No active incidents.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

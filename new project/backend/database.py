@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 # Database Configuration
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = "incident_db"
 
 client = MongoClient(MONGO_URI)
@@ -326,3 +326,4 @@ def get_engineer_stats(company=None):
         })
         
     return stats
+

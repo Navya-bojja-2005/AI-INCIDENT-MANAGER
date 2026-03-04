@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const previewBox = document.getElementById('ai-preview');
     const previewText = document.getElementById('preview-text');
 
-    const BACKEND_URL = "https://ai-incident-manager.onrender.com"; // replace if your URL is different
+    const BACKEND_URL = "https://ai-incident-manager-3.onrender.com/"; // replace if your URL is different
 
     if (analyzeBtn) {
         analyzeBtn.addEventListener('click', async () => {
@@ -79,4 +79,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
 
